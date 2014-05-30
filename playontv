@@ -2,8 +2,16 @@
 
 test -z "$1" && exit 1
 
-file=$(echo $1 | sed -e "s/\[/\\\[/g" -e "s/\]/\\\]/g")
-fullfile=$(find /home/martin/series/ -name "$file" | head -n 1)
+if [[ -f "$1" ]]; then
+  fullfile=$1
+else
+  echo $1 > /tmp/debug_watch
+  file=$(echo $1 | sed -e "s/\[/\\\[/g" -e "s/\]/\\\]/g")
+  echo $file >> /tmp/debug_watch
+  fullfile=$(find /home/martin/series/ -name "$file" | head -n 1)
+  echo $fullfile >> /tmp/debug_watch
+  test -f "$fullfile" || exit 1
+fi
 
 export DISPLAY=:0.0
 mkfifo /tmp/mpv_control > /dev/null 2>&1
