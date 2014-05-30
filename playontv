@@ -2,7 +2,10 @@
 
 test -z "$1" && exit 1
 
+file=$(echo $1 | sed -e "s/\[/\\\[/g" -e "s/\]/\\\]/g")
+fullfile=$(find /home/martin/series/ -name "$file" | head -n 1)
+
 export DISPLAY=:0.0
 mkfifo /tmp/mpv_control > /dev/null 2>&1
 /usr/local/bin/control-spotify pause
-mpv "$1" --name tv --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1 &
+mpv "$fullfile" --name tv --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1 &
