@@ -16,10 +16,4 @@ fi
 export DISPLAY=:0.0
 mkfifo /tmp/mpv_control > /dev/null 2>&1
 /usr/local/bin/control-spotify pause
-
-if [[ $fullfile == *Fullmetal* ]]; then
-  vlc --play-and-exit -f "$fullfile" > /dev/null 2>&1 &
-  exit
-fi
-
 mpv "$fullfile" --name tv --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1 &
