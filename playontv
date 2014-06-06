@@ -2,18 +2,26 @@
 
 test -z "$1" && exit 1
 
+mkfifo /tmp/mpv_control > /dev/null 2>&1
+
+if [[ "$1" == "stop" ]]; then
+  echo "stop" > /tmp/mpv_control
+  exit 0
+fi
+
+if [[ "$1" == "pause" ]]; then
+  echo "pause" > /tmp/mpv_control
+  exit 0
+fi
+
 if [[ -f "$1" ]]; then
   fullfile=$1
 else
-  echo $1 > /tmp/debug_watch
   file=$(echo $1 | sed -e "s/\[/\\\[/g" -e "s/\]/\\\]/g")
-  echo $file >> /tmp/debug_watch
   fullfile=$(find /home/martin/series/ -name "$file" | head -n 1)
-  echo $fullfile >> /tmp/debug_watch
   test -f "$fullfile" || exit 1
 fi
 
 export DISPLAY=:0.0
-mkfifo /tmp/mpv_control > /dev/null 2>&1
 /usr/local/bin/control-spotify pause
 mpv "$fullfile" --name tv --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1 &
