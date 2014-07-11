@@ -16,6 +16,8 @@ fi
 
 if [[ -f "$1" ]]; then
   fullfile=$1
+elif [[ "$1" == http* ]]; then
+  fullfile=$1
 else
   file=$(echo $1 | sed -e "s/\[/\\\[/g" -e "s/\]/\\\]/g")
   fullfile=$(find /home/martin/series/ -name "$file" | head -n 1)
@@ -24,4 +26,4 @@ fi
 
 export DISPLAY=:0.0
 /usr/local/bin/control-spotify pause
-mpv "$fullfile" --name tv --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1 &
+mpv "$fullfile" --x11-name tv --alang=jpn --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1 &
