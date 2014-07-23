@@ -1,19 +1,16 @@
 #!/bin/bash
 
+. /home/martin/git/watch-scripts/common_functions
+
 series_directory=/home/martin/series/
 output_dir=/home/martin/git/watch/series/
 
-set_ifs () {
-  SAVEIFS=$IFS
-  IFS=$(echo -en "\n\b")
-}
-
-restore_ifs () {
-  IFS=$SAVEIFS
-}
-
 set_ifs
 
+# Move files from "Seen" folder to where they belong (or set the link)
+
+
+# Generate the list of episodes
 for dir in $(find $series_directory -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -not -name "Crap" -printf "%f\n"); do
   mkdir ${output_dir}${dir} 2>/dev/null
   find $series_directory -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n > ${output_dir}${dir}/episodes

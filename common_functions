@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set_ifs () {
+  SAVEIFS=$IFS
+  IFS=$(echo -en "\n\b")
+}
+
+restore_ifs () {
+  IFS=$SAVEIFS
+}
+
+get_all_episodes () {
+  find $series_path -maxdepth 1 -type f -printf "%f\n"
+}
+
+filter_out_brackets () {
+  perl -pe 's/\[.*?\][ _]*//g'
+}
+
+filter_out_episode_numbers () {
+  sed -e 's/-.*//' -e 's/\.[Ss][0-9].*//'
+}
+
+get_first_episode () {
+  sort -u -t: -k1,1
+}
+
+print_full_filename () {
+  awk -F': ' '{print $2}'
+}
+
+print_name_of_series () {
+  echo -n $i | \
+  filter_out_brackets | \
+  filter_out_episode_numbers
+}
+
+get_episodes_from_next_links () {
+  for link in $(find $series_path -maxdepth 2 -name next); do
+    readlink "$link"
+  done
+}
