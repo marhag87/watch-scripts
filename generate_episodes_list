@@ -8,7 +8,7 @@ set_ifs
 
 
 # Generate the list of episodes
-for dir in $(find $series_path -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -not -name "Crap" -printf "%f\n"); do
+for dir in $(find $series_path -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -not -name "Crap" -not -name "Seen" -printf "%f\n"); do
   mkdir ${output_dir}${dir} 2>/dev/null
   find $series_path -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n > ${output_dir}${dir}/episodes
   readlink "$(find ${series_path}${dir} -name "next")" > ${output_dir}${dir}/0next
