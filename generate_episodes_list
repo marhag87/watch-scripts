@@ -14,7 +14,7 @@ restore_ifs () {
 
 set_ifs
 
-for dir in $(find $series_directory -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -printf "%f\n"); do
+for dir in $(find $series_directory -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -not -name "Crap" -printf "%f\n"); do
   mkdir ${output_dir}${dir} 2>/dev/null
   find $series_directory -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n > ${output_dir}${dir}/episodes
   readlink "$(find ${series_directory}${dir} -name "next")" > ${output_dir}${dir}/0next
