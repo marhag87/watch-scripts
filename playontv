@@ -5,7 +5,7 @@ test -z "$1" && exit 1
 mkfifo /tmp/mpv_control > /dev/null 2>&1
 
 if [[ "$1" == "stop" ]]; then
-  echo "quit_watch_later" > /tmp/mpv_control
+  echo "quit_watch_later 254" > /tmp/mpv_control
   exit 0
 fi
 
@@ -26,4 +26,9 @@ fi
 
 export DISPLAY=:0.0
 /usr/local/bin/control-spotify pause
-mpv "$fullfile" --x11-name tv --alang=jpn --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1 &
+{
+  mpv "$fullfile" --x11-name tv --alang=jpn --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1
+  if [ "$?" -eq 0 ]; then
+    mv "$fullfile" /home/martin/series/Seen/
+  fi
+} &
