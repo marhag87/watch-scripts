@@ -1,5 +1,8 @@
 #!/bin/bash
 
+output_dir=/home/martin/git/watch/series/
+series_path=/home/martin/series/
+
 set_ifs () {
   SAVEIFS=$IFS
   IFS=$(echo -en "\n\b")

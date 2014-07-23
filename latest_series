@@ -2,8 +2,6 @@
 
 . /home/martin/git/watch-scripts/common_functions
 
-series_path=/home/martin/series/
-
 set_ifs
 
 for i in $(get_all_episodes | sort -n); do

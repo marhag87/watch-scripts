@@ -2,21 +2,18 @@
 
 . /home/martin/git/watch-scripts/common_functions
 
-series_directory=/home/martin/series/
-output_dir=/home/martin/git/watch/series/
-
 set_ifs
 
 # Move files from "Seen" folder to where they belong (or set the link)
 
 
 # Generate the list of episodes
-for dir in $(find $series_directory -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -not -name "Crap" -printf "%f\n"); do
+for dir in $(find $series_path -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -not -name "Crap" -printf "%f\n"); do
   mkdir ${output_dir}${dir} 2>/dev/null
-  find $series_directory -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n > ${output_dir}${dir}/episodes
-  readlink "$(find ${series_directory}${dir} -name "next")" > ${output_dir}${dir}/0next
+  find $series_path -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n > ${output_dir}${dir}/episodes
+  readlink "$(find ${series_path}${dir} -name "next")" > ${output_dir}${dir}/0next
   test -s ${output_dir}${dir}/0next || \
-    find ${series_directory} -maxdepth 1 -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n | head -n 1 > ${output_dir}${dir}/0next
+    find ${series_path} -maxdepth 1 -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n | head -n 1 > ${output_dir}${dir}/0next
 done
 
 /usr/local/bin/latest_series > ${output_dir}Latest/episodes
