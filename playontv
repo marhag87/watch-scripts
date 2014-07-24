@@ -29,6 +29,7 @@ export DISPLAY=:0.0
 {
   mpv "$fullfile" --x11-name tv --alang=jpn --input-file /tmp/mpv_control < /dev/null > /dev/null 2>&1
   if [ "$?" -eq 0 ]; then
+    test -h "$fullfile" && fullfile=$(readlink -f "$fullfile")
     mv "$fullfile" /home/martin/series/Seen/
   fi
 } &

@@ -5,10 +5,18 @@
 set_ifs
 
 # Move files from "Seen" folder to where they belong (or set the link)
-
+for dir in $(get_all_series); do
+  for episode in $(find ${series_path}Seen/ -type f -iname "*${dir// /*}*" -printf "%f\n"); do
+    mv "${series_path}Seen/$episode" "${series_path}$dir/"
+    next_episode=$(ls "${series_path}$dir/" | fgrep -A1 "$episode" | fgrep -v "$episode")
+    if [ ! -z "$next_episode" ]; then
+      ln -sf "${series_path}$dir/$next_episode" "${series_path}$dir/next"
+    fi
+  done
+done
 
 # Generate the list of episodes
-for dir in $(find $series_path -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -not -name "Crap" -not -name "Seen" -printf "%f\n"); do
+for dir in $(get_all_series); do
   mkdir ${output_dir}${dir} 2>/dev/null
   find $series_path -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n > ${output_dir}${dir}/episodes
   readlink "$(find ${series_path}${dir} -name "next")" > ${output_dir}${dir}/0next

@@ -12,6 +12,10 @@ restore_ifs () {
   IFS=$SAVEIFS
 }
 
+get_all_series () {
+  find $series_path -maxdepth 1 -mindepth 1 -type d -not -name "Maybe later" -not -name "Finished" -not -name "Crap" -not -name "Seen" -printf "%f\n"
+}
+
 get_all_episodes () {
   find $series_path -maxdepth 1 -type f -printf "%f\n"
 }
