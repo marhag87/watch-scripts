@@ -10,7 +10,7 @@ for dir in $(get_all_series); do
     mv "${series_path}Seen/$episode" "${series_path}$dir/"
     next_episode=$(ls "${series_path}$dir/" | fgrep -A1 "$episode" | fgrep -v "$episode")
     if [ ! -z "$next_episode" ]; then
-      ln -sf "${series_path}$dir/$next_episode" "${series_path}$dir/next"
+      ln -sf "$next_episode" "${series_path}$dir/next"
     fi
   done
 done
