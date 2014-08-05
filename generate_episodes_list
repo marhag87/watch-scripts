@@ -10,7 +10,11 @@ for dir in $(get_all_series); do
     mv "${series_path}Seen/$episode" "${series_path}$dir/"
     next_episode=$(ls "${series_path}$dir/" | fgrep -A1 "$episode" | fgrep -v "$episode")
     if [ ! -z "$next_episode" ]; then
-      ln -sf "$next_episode" "${series_path}$dir/next"
+      if [ "$next_episode" == "next" ]; then
+        rm -f "${series_path}$dir/next"
+      else
+        ln -sf "$next_episode" "${series_path}$dir/next"
+      fi
     fi
   done
 done
@@ -18,7 +22,7 @@ done
 # Generate the list of episodes
 for dir in $(get_all_series); do
   mkdir ${output_dir}${dir} 2>/dev/null
-  find $series_path -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n > ${output_dir}${dir}/episodes
+  find $series_path -path ${series_path}Finished -prune -o -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n > ${output_dir}${dir}/episodes
   readlink "$(find ${series_path}${dir} -name "next")" > ${output_dir}${dir}/0next
   test -s ${output_dir}${dir}/0next || \
     find ${series_path} -maxdepth 1 -type f -iname "*${dir// /*}*" -printf "%f\n" | sort -n | head -n 1 > ${output_dir}${dir}/0next
@@ -27,3 +31,6 @@ done
 /usr/local/bin/latest_series > ${output_dir}Latest/episodes
 
 restore_ifs
+
+cd /home/martin/git/watch/
+git commit -a -m "Update episodes" && git push web
