@@ -4,8 +4,11 @@ test -z "$1" && exit 1
 
 mkfifo /tmp/mpv_control > /dev/null 2>&1
 
+#Implement another button to save the episode for later
+#echo "quit_watch_later 254" > /tmp/mpv_control
+
 if [[ "$1" == "stop" ]]; then
-  echo "quit_watch_later 254" > /tmp/mpv_control
+  echo "quit" > /tmp/mpv_control
   exit 0
 fi
 
@@ -31,5 +34,6 @@ export DISPLAY=:0.0
   if [ "$?" -eq 0 ]; then
     test -h "$fullfile" && fullfile=$(readlink -f "$fullfile")
     mv "$fullfile" /home/martin/series/Seen/
+    /usr/local/bin/generate_episodes_list > /dev/null 2>&1
   fi
 } &
