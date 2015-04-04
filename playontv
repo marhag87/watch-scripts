@@ -2,7 +2,7 @@
 
 test -z "$1" && exit 1
 
-mkfifo /tmp/mpv_control > /dev/null 2>&1
+[[ -p /tmp/mpv_control ]] || mkfifo /tmp/mpv_control
 
 #Implement another button to save the episode for later
 #echo "quit_watch_later 254" > /tmp/mpv_control
